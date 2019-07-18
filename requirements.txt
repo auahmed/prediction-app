@@ -18,3 +18,4 @@ google-cloud-storage
 google-api-core
 google-auth
 google-cloud-core
+google-cloud-bigquery
