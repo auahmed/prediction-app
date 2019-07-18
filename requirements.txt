@@ -1,6 +1,3 @@
-# Requirements for running notebooks
--e .
-
 # For running tests
 nose
 
