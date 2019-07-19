@@ -10,6 +10,8 @@ xgboost
 catboost
 lightgbm
 
+pandas
+numpy
 shap
 
 # Server
