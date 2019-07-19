@@ -66,11 +66,19 @@ def predict():
                 model_content = json.load(jsonfile)
             print('Loaded model JSON')
           except Exception as e:
+            print('Unable to load model json from local')
             print(e)
+            return 'Unable to load model json from local', 500
 
         predict = _getPrediction(model_content[0], request.get_json(), model_content[1])
 
+        print('Successfully printed for input: ' + str(predict))
+
         # Send prediction data to Big Query
         stream_bq(predict)
+        print('Successfully loaded prediction to Big Query')
+
         return predict, 200
 # [END prediction handler]
+
+app.run(host='0.0.0.0', port=8080)
