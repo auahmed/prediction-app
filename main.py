@@ -58,15 +58,17 @@ def predict():
             f.write(str(model_content))
             f.close()
 
-        global model_json
         try:
-          with open(local_gcs + 'model.json') as jsonfile:
-              model_json = json.load(jsonfile)
-          print('Loaded model JSON')
-        except Exception as e:
-          print(e)
+          model_content
+        except NameError:
+          try:
+            with open(local_gcs + 'model.json') as jsonfile:
+                model_content = json.load(jsonfile)
+            print('Loaded model JSON')
+          except Exception as e:
+            print(e)
 
-        predict = _getPrediction(model_json[0], request.get_json(), model_json[1])
+        predict = _getPrediction(model_content[0], request.get_json(), model_content[1])
 
         # Send prediction data to Big Query
         stream_bq(predict)
