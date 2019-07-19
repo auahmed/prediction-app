@@ -159,7 +159,7 @@ def _getPrediction(model, prediction, train_data_input):
     # print(type(prediction))
 
     # converting the dataframe into an np array
-    shap_train_data = np.array(train_data_input[:100])
+    shap_train_data = np.array(train_data_input)
 
     # prediction on this line instead of test_data_input
     shap_test_data = np.array(prediction)
