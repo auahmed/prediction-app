@@ -4,8 +4,6 @@ nose
 # For neural network examples
 keras
 tensorflow
-torch
-torchvision
 
 # For decision tree examples
 xgboost
@@ -14,6 +12,7 @@ lightgbm
 
 # Server
 Flask
+gunicorn
 google-cloud-storage
 google-api-core
 google-auth

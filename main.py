@@ -1,6 +1,7 @@
 from flask import Flask, request
 import os
 from google.cloud import storage
+from gcp import stream_bq
 
 app = Flask(__name__)
 
@@ -62,6 +63,8 @@ def predict():
 
         predict = get_prediction(request.data)
 
+        # Send prediction data to Big Query
+        # stream_bq(predict)
         return predict, 200
 # [END prediction handler]
 
