@@ -54,12 +54,17 @@ def predict():
         else:
             model_content = _train()
             f = open(local_gcs + 'model.json', "w+")
+            print('Writing model to file ' + local_gcs + 'model.json')
             f.write(str(model_content))
             f.close()
 
-        f = open(local_gcs + 'model.json')
-        contents = f.read()
-        model_json = json.loads(contents)
+        global model_json
+        try:
+          with open(local_gcs + 'model.json') as jsonfile:
+              model_json = json.load(jsonfile)
+          print('Loaded model JSON')
+        except Exception as e:
+          print(e)
 
         predict = _getPrediction(model_json[0], request.get_json(), model_json[1])
 
