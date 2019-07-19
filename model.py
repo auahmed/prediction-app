@@ -18,12 +18,12 @@ import pprint
 ## train the model
 def _train():
     # import data files
-    train_data = pd.read_csv('gcs-data/adult.data.csv', index_col=False,
+    train_data = pd.read_csv('gcs/data/adult.data.csv', index_col=False,
                             names=['age', 'workclass', 'fnlwgt', 'education',
                                     'education-num', 'marital-status', 'occupation',
                                     'relationship', 'race', 'sex', 'capital-gain', 'capital-loss',
                                     'hours-per-week', 'native-country', 'salary'])
-    test_data = pd.read_csv('gcs-data/adult.test.csv', index_col=False,
+    test_data = pd.read_csv('gcs/data/adult.test.csv', index_col=False,
                             names=['age', 'workclass', 'fnlwgt', 'education',
                                 'education-num', 'marital-status', 'occupation',
                                 'relationship', 'race', 'sex', 'capital-gain', 'capital-loss',

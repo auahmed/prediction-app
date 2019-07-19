@@ -10,6 +10,8 @@ xgboost
 catboost
 lightgbm
 
+shap
+
 # Server
 Flask
 gunicorn

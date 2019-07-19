@@ -2,6 +2,7 @@ from flask import Flask, request
 import os
 from google.cloud import storage
 from gcp import stream_bq
+from model import _train, _getPrediction
 
 app = Flask(__name__)
 
@@ -56,10 +57,13 @@ def predict():
             get_gcs('data', 'data/')
 
         # Train Data
-        if os.path.exists(local_gcs+model_file.rsplit('/', 1)[-1]):
-            print('Already have model file from gcs')
+        if os.path.exists(local_gcs + 'model.json'):
+            print('Already trained the data')
         else:
-            get_gcs('data/test.json', '')
+            model_content = _train()
+            f = open(local_gcs + 'model.json')
+            f.write(model_content)
+            f.close()
 
         predict = get_prediction(request.data)
 
