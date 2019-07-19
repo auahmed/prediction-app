@@ -113,7 +113,7 @@ def _train():
         json_file.write(model.to_json())
     json_file.close()
 
-    test_data_input.to_csv(local_gcs + 'test_data_input.csv')
+    test_data_input.to_csv(local_gcs + 'test_data_input.csv', index=False)
     return [model, test_data_input, train_data_input]
 
 

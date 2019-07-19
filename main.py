@@ -4,16 +4,17 @@ import json
 from google.cloud import storage
 from gcp import stream_bq
 from model import _train, _getPrediction
+from flask_cors import CORS
 
 # Helper libraries
 import pandas as pd
 
 # TensorFlow and tf.keras
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.models import model_from_json
+import tensorflow as tf
+from tensorflow import keras
 
 app = Flask(__name__)
+CORS(app)
 
 dirpath = os.getcwd()
 local_gcs = dirpath + '/gcs/'
@@ -59,7 +60,7 @@ def predict():
             get_gcs('data', 'data/')
 
         # Train Data
-        if os.path.exists(local_gcs + 'model.json.shitfaced'):
+        if os.path.exists(local_gcs + 'model.json'):
             print('Already trained the data')
         else:
             model_content = _train()
@@ -68,20 +69,12 @@ def predict():
             model_content
         except NameError:
             try:
-                model_content = [0, 1]
-
                 json_file = open(local_gcs + 'model.json')
                 loaded_model_json = json_file.read()
                 json_file.close()
-                print('-------START')
-                tmp = model_from_json(loaded_model_json)
-                print('-------DONE')
-                print(tmp)
-                print(type(tmp))
-                print('-------1')
-                model_content[0] = tmp
-                print('-------2')
-                model_content[1] = pd.read_csv(local_gcs + 'test_data_input.csv')
+                _model = keras.models.model_from_json(loaded_model_json, custom_objects=None)
+                _test_data = pd.read_csv(local_gcs + 'test_data_input.csv')
+                model_content = [_model, _test_data] 
                 print('Loaded model JSON')
             except Exception as e:
                 print('Unable to load model json from local')

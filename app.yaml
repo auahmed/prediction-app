@@ -9,7 +9,7 @@ resources:
  disk_size_gb: 40
 
 handlers:
-- url: /prediction
-  static_dir: static/prediction
+- url: /predict
+  static_dir: static/predict
   http_headers:
     Access-Control-Allow-Origin: '*'
