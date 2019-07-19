@@ -61,7 +61,7 @@ def predict():
             print('Already trained the data')
         else:
             model_content = _train()
-            f = open(local_gcs + 'model.json')
+            f = open(local_gcs + 'model.json', "w+")
             f.write(model_content)
             f.close()
 
