@@ -1,5 +1,6 @@
 from flask import Flask, request
 import os
+import json
 from google.cloud import storage
 from gcp import stream_bq
 from model import _train, _getPrediction
@@ -30,15 +31,6 @@ def get_gcs(location, saveTo):
   for blob in blobs:
     blob.download_to_filename(local_gcs + saveTo + blob.name.rsplit('/', 1)[-1])
 
-
-def get_prediction(input):
-    """A function that will return ....
-
-    Args:
-        input: 
-    """
-    return 'prediction app running'
-
 # [START index handler]
 @app.route('/', methods=['GET'])
 def index():
@@ -62,12 +54,16 @@ def predict():
         else:
             model_content = _train()
             f = open(local_gcs + 'model.json', "w+")
-            f.write(model_content)
+            f.write(str(model_content))
             f.close()
 
-        predict = get_prediction(request.data)
+        f = open(local_gcs + 'model.json')
+        contents = f.read()
+        model_json = json.loads(contents)
+
+        predict = _getPrediction(model_json[0], request.get_json(), model_json[1])
 
         # Send prediction data to Big Query
-        # stream_bq(predict)
+        stream_bq(predict)
         return predict, 200
 # [END prediction handler]
