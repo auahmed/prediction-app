@@ -188,14 +188,3 @@ def _getPrediction(model, prediction, train_data_input):
     
     # return object built
     return obj
-
-
-# [model, test_data_input, train_data_input]
-# mdd = ^
-_mdd = _train()
-# print(type(_mdd[2]))
-prediction = [25,  7, 40,  0,  0,  1,  0,  0,  0,  0,  0,  0,  1,  0,  0,  1,  0,
-                0,  0,  0,  0,  0,  1,  0,  0,  1,  0,  0,  0,  0,  1,  0,  0,  0,
-                1,  0,  0,  0,  1,  0]
-p = _getPrediction(_mdd[0], prediction, _mdd[1])
-print(p)
