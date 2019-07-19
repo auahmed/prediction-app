@@ -8,6 +8,7 @@ shap
 
 # Server
 Flask
+flask_cors
 gunicorn
 google-cloud-storage
 google-api-core
