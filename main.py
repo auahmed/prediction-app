@@ -71,6 +71,3 @@ def predict():
         # stream_bq(predict)
         return predict, 200
 # [END prediction handler]
-
-
-app.run(host='0.0.0.0', port=8080)
