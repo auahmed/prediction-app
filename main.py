@@ -5,6 +5,14 @@ from google.cloud import storage
 from gcp import stream_bq
 from model import _train, _getPrediction
 
+# Helper libraries
+import pandas as pd
+
+# TensorFlow and tf.keras
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.models import model_from_json
+
 app = Flask(__name__)
 
 dirpath = os.getcwd()
@@ -12,24 +20,26 @@ local_gcs = dirpath + '/gcs/'
 model_file = 'data/test.json'
 training_file = 'data'
 
+
 def get_gcs(location, saveTo):
-  """A function to get files from gcs
-  """
-  print('getting file(s) for ' + location)
-  bucket_name = 'beyond-analytics-247114-tf-test'
+    """A function to get files from gcs
+    """
+    print('getting file(s) for ' + location)
+    bucket_name = 'beyond-analytics-247114-tf-test'
 
-  # Create this folder locally
-  if not os.path.exists(local_gcs + saveTo):
-    os.makedirs(local_gcs + saveTo)
-  else:
-    print('folder already exists: ' + local_gcs + saveTo)
+    # Create this folder locally
+    if not os.path.exists(local_gcs + saveTo):
+        os.makedirs(local_gcs + saveTo)
+    else:
+        print('folder already exists: ' + local_gcs + saveTo)
 
-  client = storage.Client()
-  bucket = client.get_bucket(bucket_name)
-  # List blobs iterate in folder 
-  blobs=bucket.list_blobs(prefix=location)
-  for blob in blobs:
-    blob.download_to_filename(local_gcs + saveTo + blob.name.rsplit('/', 1)[-1])
+    client = storage.Client()
+    bucket = client.get_bucket(bucket_name)
+    # List blobs iterate in folder
+    blobs = bucket.list_blobs(prefix=location)
+    for blob in blobs:
+        blob.download_to_filename(
+            local_gcs + saveTo + blob.name.rsplit('/', 1)[-1])
 
 # [START index handler]
 @app.route('/', methods=['GET'])
@@ -49,28 +59,37 @@ def predict():
             get_gcs('data', 'data/')
 
         # Train Data
-        if os.path.exists(local_gcs + 'model.json'):
+        if os.path.exists(local_gcs + 'model.json.shitfaced'):
             print('Already trained the data')
         else:
             model_content = _train()
-            f = open(local_gcs + 'model.json', "w+")
-            print('Writing model to file ' + local_gcs + 'model.json')
-            f.write(str(model_content))
-            f.close()
 
         try:
-          model_content
+            model_content
         except NameError:
-          try:
-            with open(local_gcs + 'model.json') as jsonfile:
-                model_content = json.load(jsonfile)
-            print('Loaded model JSON')
-          except Exception as e:
-            print('Unable to load model json from local')
-            print(e)
-            return 'Unable to load model json from local', 500
+            try:
+                model_content = [0, 1]
 
-        predict = _getPrediction(model_content[0], request.get_json(), model_content[1])
+                json_file = open(local_gcs + 'model.json')
+                loaded_model_json = json_file.read()
+                json_file.close()
+                print('-------START')
+                tmp = model_from_json(loaded_model_json)
+                print('-------DONE')
+                print(tmp)
+                print(type(tmp))
+                print('-------1')
+                model_content[0] = tmp
+                print('-------2')
+                model_content[1] = pd.read_csv(local_gcs + 'test_data_input.csv')
+                print('Loaded model JSON')
+            except Exception as e:
+                print('Unable to load model json from local')
+                print(e)
+                return 'Unable to load model json from local', 500
+
+        predict = _getPrediction(
+            model_content[0], request.get_json(), model_content[1])
 
         print('Successfully printed for input: ' + str(predict))
 
@@ -80,3 +99,10 @@ def predict():
 
         return predict, 200
 # [END prediction handler]
+
+
+if __name__ == '__main__':
+    # This is used when running locally only. When deploying to Google App
+    # Engine, a webserver process such as Gunicorn will serve the app. This
+    # can be configured by adding an `entrypoint` to app.yaml.
+    app.run(host='0.0.0.0', port=8080, debug=True)

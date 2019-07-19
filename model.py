@@ -15,6 +15,11 @@ import shap
 # printing
 import pprint
 
+import os
+
+dirpath = os.getcwd()
+local_gcs = dirpath + '/gcs/'
+
 ## train the model
 def _train():
     # import data files
@@ -104,6 +109,11 @@ def _train():
 
     print('Test accuracy:', test_acc)
 
+    with open(local_gcs + 'model.json', 'w+') as json_file:
+        json_file.write(model.to_json())
+    json_file.close()
+
+    test_data_input.to_csv(local_gcs + 'test_data_input.csv')
     return [model, test_data_input, train_data_input]
 
 

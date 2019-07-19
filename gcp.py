@@ -17,9 +17,8 @@ def stream_bq(data):
 
     table = client.get_table(table_ref)
 
-    for d in jsonData:
-        rows_to_insert = [d]
-        errors = client.insert_rows(table, rows_to_insert)
-        if (errors != []):
-            print(errors)
-        assert errors == []
+    rows_to_insert = [jsonData]
+    errors = client.insert_rows(table, rows_to_insert)
+    if (errors != []):
+        print(errors)
+    assert errors == []
