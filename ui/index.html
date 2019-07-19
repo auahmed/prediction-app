@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+    <link rel="stylesheet" type="text/css" href="https://semantic-ui.com/dist/components/reset.css">
+    <link rel="stylesheet" type="text/css" href="https://semantic-ui.com/dist/components/site.css">
+    <link rel="stylesheet" type="text/css" href="https://semantic-ui.com/dist/components/container.css">
+    <link rel="stylesheet" type="text/css" href="https://semantic-ui.com/dist/components/divider.css">
+    <link rel="stylesheet" type="text/css" href="https://semantic-ui.com/dist/components/grid.css">
+    <link rel="stylesheet" type="text/css" href="https://semantic-ui.com/dist/components/header.css">
+
+    <!-- <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script> -->
+
+<div id=root>
+    <div class="ui text container">
+        <h1 class="ui dividing header">Beyond Analytics</h1>
+    
+        <h3 class="first">Form Field</h3>
+        <form class="ui form">
+            <!-- <div class="field">
+                <label>Input</label>
+                <input type="text" name="input" placeholder="data">
+            </div> -->
+            <button class="ui button padding" type="button" id="myBtn1">Test1</button>
+            <button class="ui button padding" type="button" id="myBtn2">Test2</button>
+            <button class="ui button padding" type="button" id="myBtn3">Test3</button>
+            <button class="ui button padding" type="button" id="myBtn4">Test4</button>
+        </form>
+
+        <!-- <p class="ui dividing header"></p>A container is a fixed width element that wraps your site's content. It remains a constant size and uses
+            <b>margin</b> to center. Containers are the simplest way to center page content inside a grid.
+        </p> -->
+        <pre id="responseText">
+            Test
+        </pre>
+    </div>
+
+    </div>
+</div>
+
+<script>
+    // Sending and receiving data in JSON format using POST method
+    document.getElementById("myBtn1").addEventListener("click", function () {
+        var xhr = new XMLHttpRequest();
+        var url = "https://beyond-analytics-247114.appspot.com/predict";
+        // var url = "http://0.0.0.0:8080/prediction"
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var json = JSON.parse(xhr.responseText);
+                console.log(json);
+                document.getElementById('responseText').innerHTML = JSON.stringify(json, undefined, 2)
+            }
+        };
+
+        // stringify 
+        var data = JSON.stringify([25, 7, 40, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,
+                1, 0, 0, 0, 1, 0]
+        );
+        xhr.send(data);
+    });
+
+    // Sending and receiving data in JSON format using POST method
+        document.getElementById("myBtn2").addEventListener("click", function () {
+            var xhr = new XMLHttpRequest();
+            var url = "https://beyond-analytics-247114.appspot.com/predict";
+            // var url = "http://0.0.0.0:8080/prediction"
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var json = JSON.parse(xhr.responseText);
+                    console.log(json);
+                    document.getElementById('responseText').innerHTML = JSON.stringify(json, undefined, 2)
+                }
+            };
+
+            // stringify -- need new data here
+            var data = JSON.stringify([25, 7, 40, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,
+                1, 0, 0, 0, 1, 0]
+            );
+            xhr.send(data);
+        });
+</script>
+
+<style type="text/css">
+    /* Some basic formatting */
+
+    .padding {
+        padding-top: 5em;
+    }
+
+    code {
+        background-color: #E0E0E0;
+        padding: 0.25em 0.3em;
+        font-family: 'Lato';
+        font-weight: bold;
+    }
+
+    .container {
+        padding: 5em 0em;
+    }
+
+    .ui.dividing.header,
+    .first {
+        margin-top: 5em;
+    }
+
+    .ui.dividing.header:first-child {
+        margin-top: 0em;
+    }
+
+    h1,
+    h3 {
+        margin-top: 10em;
+    }
+
+    img {
+        display: block;
+        max-width: 100%;
+    }
+
+    img+img {
+        margin-top: 0.5em;
+    }
+
+    /* Shows content box (not negative margins) */
+    .grid {
+        position: relative;
+    }
+
+    .grid:before {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        background-color: #F0F0F0;
+        content: '';
+        width: calc(100% - 2rem);
+        height: calc(100% - 2rem);
+        box-shadow: 0px 0px 0px 1px #DDDDDD inset;
+    }
+
+    .ui.divided.grid:before,
+    .celled.grid:before {
+        display: none;
+    }
+
+    .ui.aligned .column:after {
+        display: none !important;
+    }
+
+    .grid .column:not(.row):not(.grid):after {
+        background-color: rgba(86, 61, 124, .15);
+        box-shadow: 0px 0px 0px 1px rgba(86, 61, 124, 0.2) inset;
+        content: "";
+        display: block;
+        min-height: 50px;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .stackable.grid:before {
+            width: 100%;
+            left: 0em;
+        }
+    }
+</style>
+
+</html>
